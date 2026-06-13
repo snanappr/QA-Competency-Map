@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quality (QA) Career Framework</title>
+<style>
+  :root{
+    --ink:#1a2433; --muted:#5b6573; --line:#dfe3ea; --bg:#f6f7f9;
+    --p:#2f6f4f; --p-soft:#e8f1ec;
+    --m:#9a5b2e; --m-soft:#f6ece2;
+    --accent:#2b5d8a; --accent-soft:#e6eef6;
+    --free:#2f6f4f; --freecert:#2b5d8a; --paid:#9a5b2e;
+    --warn:#b1851f; --warn-soft:#fbf3dc;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);background:var(--bg);line-height:1.5;font-size:15px}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+  header{background:#fff;border-bottom:1px solid var(--line);padding:26px 0 0}
+  header h1{margin:0 0 4px;font-size:26px;letter-spacing:-.3px}
+  header p.sub{margin:0 0 18px;color:var(--muted);font-size:14px}
+  .draftpill{display:inline-block;background:var(--warn-soft);color:#6b531a;border:1px solid #e7d9a8;
+    border-radius:20px;padding:1px 9px;font-size:11px;font-weight:700;letter-spacing:.04em;vertical-align:middle;margin-left:4px}
+
+  nav.tabs{display:flex;gap:2px;flex-wrap:wrap}
+  nav.tabs button{appearance:none;border:1px solid var(--line);border-bottom:none;
+    background:#eef0f3;color:var(--muted);padding:10px 16px;font-size:14px;font-weight:600;
+    border-radius:8px 8px 0 0;cursor:pointer}
+  nav.tabs button[aria-selected="true"]{background:#fff;color:var(--ink);border-color:var(--line)}
+  nav.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
+  main{background:#fff;border:1px solid var(--line);border-top:none;padding:28px 0 60px;min-height:60vh}
+  section[role=tabpanel]{display:none}
+  section[role=tabpanel].active{display:block}
+
+  h2{font-size:20px;margin:0 0 6px}
+  .lede{color:var(--muted);font-size:14px;margin:0 0 22px;max-width:74ch}
+  h3{font-size:14px;margin:28px 0 8px;letter-spacing:.03em;text-transform:uppercase;color:var(--accent)}
+  h4{font-size:14px;margin:16px 0 4px}
+
+  table{border-collapse:collapse;width:100%;margin:10px 0 8px;font-size:13px}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:#f0f3f7;font-weight:700;font-size:12px}
+  caption{caption-side:top;text-align:left;font-size:12px;color:var(--muted);margin-bottom:6px}
+  .rowlabel{background:#f7f9fb;font-weight:700;width:150px}
+  .rowlabel small{display:block;font-weight:400;color:var(--muted);font-size:11px;margin-top:3px}
+  .p th{background:var(--p-soft)} .m th{background:var(--m-soft)}
+  td ul{margin:0;padding-left:15px} td ul li{margin:2px 0}
+  .add{color:var(--muted);font-size:11px;font-style:italic;display:block;margin-top:3px}
+
+  /* flow chart */
+  .flow{border:1px solid var(--line);border-radius:10px;padding:18px;background:#fcfdfe;margin:8px 0 4px}
+  .mapscroll{overflow-x:auto}
+  .trackmap{width:100%;min-width:940px;height:auto;display:block}
+  .trackmap .bands text{fill:#9aa4b2;font-size:11px;font-weight:600;text-anchor:middle;letter-spacing:.02em}
+  .trackmap .links line,.trackmap .links path{fill:none;stroke:#b7c0cc;stroke-width:3}
+  .trackmap .nd .lv{text-anchor:middle;font-size:15px;font-weight:800;fill:var(--ink)}
+  .trackmap .nd .rl{text-anchor:middle;font-size:11.5px;fill:var(--muted)}
+  .trackmap .nd .forktag{text-anchor:middle;font-size:10.5px;fill:var(--warn);font-weight:700}
+  .trackmap .nd .opt{text-anchor:middle;font-size:10px;fill:var(--paid);font-weight:700;font-style:italic}
+  .trackmap .paritylabel{text-anchor:middle;font-size:9.5px;fill:#9aa4b2;font-style:italic}
+  .maplegend{font-size:12px;color:var(--muted);margin:12px 2px 0}
+  .key{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:middle;margin-right:3px}
+  .key.shared{background:var(--accent-soft);border:1px solid #7aa3c8}
+  .key.p{background:var(--p-soft);border:1px solid #79b291}
+  .key.m{background:var(--m-soft);border:1px solid #cf9a64}
+
+  .pill{display:inline-block;font-size:10.5px;font-weight:700;border-radius:20px;padding:2px 8px;margin-bottom:4px}
+  .pill.free{background:var(--p-soft);color:var(--free)}
+  .pill.freecert{background:var(--accent-soft);color:var(--freecert)}
+  .pill.paid{background:var(--m-soft);color:var(--paid)}
+  .freq{color:var(--paid);font-weight:700;font-size:11.5px;display:block;margin-top:2px}
+  .lvltag{display:inline-block;background:#eef2f6;border:1px solid #d7dee7;border-radius:5px;
+    padding:1px 6px;font-size:11px;font-weight:700;color:var(--accent);white-space:nowrap}
+  .none{color:#9aa4b2}
+
+  .note{background:var(--warn-soft);border-left:3px solid var(--warn);padding:11px 14px;
+    border-radius:0 6px 6px 0;font-size:13px;margin:14px 0;color:#6b531a}
+  .stacknote{background:var(--accent-soft);border-left:3px solid var(--accent);padding:9px 13px;
+    border-radius:0 6px 6px 0;font-size:12.5px;margin:6px 0 16px;color:#26415c}
+  ul.tight{margin:6px 0;padding-left:20px} ul.tight li{margin:4px 0}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:780px){.twocol{grid-template-columns:1fr}}
+  footer{color:var(--muted);font-size:12px;padding:14px 0;text-align:center;
+    background:#fff;border-top:1px solid var(--line);position:sticky;bottom:0;z-index:30}
+  main{padding-bottom:20px}
+
+  .gloss{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 18px}
+  @media(max-width:680px){.gloss{grid-template-columns:1fr}}
+  .gcard{border:1px solid var(--line);border-radius:9px;padding:13px 15px;background:#fcfdfe}
+  .gcard h4{margin:0 0 4px;font-size:14px}
+  .gcard.rev{border-top:3px solid #7aa3c8}
+  .gcard.spec{border-top:3px solid #79b291}
+  .gcard p{margin:0;font-size:13px;color:var(--muted)}
+  .term{border-bottom:1px dotted var(--accent);cursor:help;font-weight:600}
+
+  .info{position:relative;display:inline-block;margin-top:6px}
+  .info .trigger{font-size:11px;font-weight:700;color:var(--accent);cursor:pointer;
+    border:1px solid #cdd8e4;background:#eef3f8;border-radius:20px;padding:2px 9px;white-space:nowrap;user-select:none}
+  .info .pop{display:none;position:absolute;left:0;top:calc(100% + 6px);z-index:20;width:300px;
+    background:#fff;border:1px solid var(--line);border-radius:9px;box-shadow:0 8px 26px rgba(20,40,70,.16);
+    padding:12px 13px;font-size:12px;color:var(--ink);font-weight:400;text-transform:none;letter-spacing:0;line-height:1.45}
+  .info.open .pop,.info:hover .pop{display:block}
+  .info .pop .who{font-weight:700;color:var(--accent);margin:0 0 5px;display:block}
+  .info .pop .why{color:var(--muted);margin:0}
+  .info .pop b{color:var(--ink)}
+  @media(max-width:980px){.info .pop{width:240px}}
+
+  .legendbar{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--muted);
+    background:#fafbfc;border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0 16px;align-items:center}
+  td a.course{color:var(--accent);text-decoration:none;border-bottom:1px solid #b9cee2;font-weight:600}
+  td a.course:hover{border-bottom-color:var(--accent)}
+  td a.course::after{content:" ↗";font-size:10px;color:#9aa4b2;border:none}
+  .openitem{background:#fff;border:1px dashed #cfd6e0;border-radius:8px;padding:12px 15px;margin-top:18px}
+  .openitem h4{margin:0 0 6px;color:var(--warn)}
+  .coursespec{border:1px solid #bcd6c6;border-top:4px solid var(--p);border-radius:10px;
+    padding:16px 18px;background:#fbfdfc;margin:14px 0}
+  .coursespec h4{margin:0 0 2px;font-size:15px;color:var(--p)}
+  .coursespec .tagline{font-size:12px;color:var(--muted);margin:0 0 12px}
+  .coursespec .spec-grid{display:grid;grid-template-columns:140px 1fr;gap:6px 14px;font-size:13px}
+  .coursespec .spec-grid dt{font-weight:700;color:var(--ink)}
+  .coursespec .spec-grid dd{margin:0;color:var(--muted)}
+  .coursespec .spec-grid dd b{color:var(--ink)}
+  @media(max-width:680px){.coursespec .spec-grid{grid-template-columns:1fr;gap:2px 0}.coursespec .spec-grid dt{margin-top:8px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Quality (QA) Career Framework</h1>
+    <p class="sub">Dual track competency mapping and progression for the Editing Quality team (Creative Operations) <span class="draftpill">DRAFT</span></p>
+    <nav class="tabs" role="tablist" aria-label="Framework sections">
+      <button role="tab" aria-selected="true"  aria-controls="t-summary" id="tab-summary">Summary</button>
+      <button role="tab" aria-selected="false" aria-controls="t-ptrack"  id="tab-ptrack">P-Track (IC / SME)</button>
+      <button role="tab" aria-selected="false" aria-controls="t-mtrack"  id="tab-mtrack">M-Track (Management)</button>
+      <button role="tab" aria-selected="false" aria-controls="t-ld"      id="tab-ld">L&amp;D / Training</button>
+      <button role="tab" aria-selected="false" aria-controls="t-values"  id="tab-values">Values &amp; Rollout</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <!-- ============ SUMMARY ============ -->
+  <section role="tabpanel" id="t-summary" aria-labelledby="tab-summary" class="active">
+    <h2>Summary</h2>
+    <p class="lede">This framework replaces the single-band QA structure with two parallel tracks: an <b>IC / SME track (P1–P5)</b> for people who want to deepen craft, and a <b>Management track (M1–M4)</b> for people who want to lead. Everyone shares the path from P1 to P3, then chooses a track. Promotion follows the company rule: master your level, perform the next, and reach into the one above.</p>
+
+    <h3>Career-track map</h3>
+    <div class="flow">
+      <div class="mapscroll">
+      <svg viewBox="20 0 1110 360" class="trackmap" role="img"
+           aria-label="Horizontal career map: shared path P1 to P3, forking at P3 into the P-track (P4, P5) and M-track (M1 to M4). P4 and M1 are the same competency level; P4 and P5 report into the management line.">
+        <g class="bands">
+          <rect x="40"  y="40" width="180" height="280" fill="#f4f6f9"/>
+          <rect x="220" y="40" width="200" height="280" fill="#eef1f6"/>
+          <rect x="420" y="40" width="165" height="280" fill="#f4f6f9"/>
+          <rect x="585" y="40" width="240" height="280" fill="#eef1f6"/>
+          <rect x="825" y="40" width="285" height="280" fill="#f4f6f9"/>
+          <text x="120"  y="58">L1 · Operates</text>
+          <text x="320"  y="58">L2 · Discerns</text>
+          <text x="520"  y="58">L3 · Independent</text>
+          <text x="705"  y="58">L4 · Trusted / Defining</text>
+          <text x="960"  y="58">L5 · Strategic</text>
+        </g>
+        <g class="links" fill="none" stroke="#b7c0cc" stroke-width="3">
+          <line x1="120" y1="180" x2="320" y2="180"/>
+          <line x1="320" y1="180" x2="520" y2="180"/>
+          <path d="M520,180 C585,180 585,130 645,130"/>
+          <path d="M520,180 C585,180 585,250 645,250"/>
+          <line x1="688" y1="130" x2="1003" y2="130" class="prail" stroke="#9ec6ad"/>
+          <line x1="688" y1="250" x2="747" y2="250" class="mrail" stroke="#e0bd97"/>
+          <line x1="799" y1="250" x2="875" y2="250" class="mrail" stroke="#e0bd97"/>
+          <line x1="927" y1="250" x2="1003" y2="250" class="mrail" stroke="#e0bd97"/>
+          <line x1="645" y1="156" x2="645" y2="224" class="parity" stroke="#9aa4b2" stroke-width="2" stroke-dasharray="4 4"/>
+        </g>
+        <g class="nodes">
+          <g class="nd shared" transform="translate(120,180)">
+            <circle r="26" fill="#e6eef6" stroke="#7aa3c8" stroke-width="2"/><text class="lv" y="0" dy="5">P1</text><text class="rl" y="46">Photo Quality Reviewer</text>
+          </g>
+          <g class="nd shared" transform="translate(320,180)">
+            <circle r="26" fill="#e6eef6" stroke="#7aa3c8" stroke-width="2"/><text class="lv" y="0" dy="5">P2</text><text class="rl" y="46">Sr Photo Quality Reviewer</text>
+          </g>
+          <g class="nd shared" transform="translate(520,180)">
+            <circle r="26" fill="#e6eef6" stroke="#7aa3c8" stroke-width="2"/><text class="lv" y="0" dy="5">P3</text><text class="rl" y="46">Senior Quality Specialist</text>
+            <text class="forktag" y="64">↗ fork ↘ choose track</text>
+          </g>
+          <g class="nd p" transform="translate(645,130)">
+            <circle r="26" fill="#e8f1ec" stroke="#79b291" stroke-width="2"/><text class="lv" y="0" dy="5">P4</text><text class="rl" y="-38">Lead Quality Specialist (SME)</text>
+          </g>
+          <g class="nd p dashed" transform="translate(1029,130)">
+            <circle r="26" fill="#e8f1ec" stroke="#79b291" stroke-width="2" stroke-dasharray="5 4"/><text class="lv" y="0" dy="5">P5</text><text class="rl" y="-50">Principal Quality SME</text>
+            <text class="opt" y="-34">optional ceiling</text>
+          </g>
+          <g class="nd m" transform="translate(645,250)">
+            <circle r="26" fill="#f6ece2" stroke="#cf9a64" stroke-width="2"/><text class="lv" y="0" dy="5">M1</text><text class="rl" y="48">Team Lead</text>
+          </g>
+          <g class="nd m" transform="translate(773,250)">
+            <circle r="26" fill="#f6ece2" stroke="#cf9a64" stroke-width="2"/><text class="lv" y="0" dy="5">M2</text><text class="rl" y="48">Senior Team Lead</text>
+          </g>
+          <g class="nd m" transform="translate(901,250)">
+            <circle r="26" fill="#f6ece2" stroke="#cf9a64" stroke-width="2"/><text class="lv" y="0" dy="5">M3</text><text class="rl" y="48">Operations Mgr</text>
+          </g>
+          <g class="nd m" transform="translate(1029,250)">
+            <circle r="26" fill="#f6ece2" stroke="#cf9a64" stroke-width="2"/><text class="lv" y="0" dy="5">M4</text><text class="rl" y="48">Senior Ops Mgr</text>
+          </g>
+        </g>
+        <text x="663" y="194" class="paritylabel">same level</text>
+      </svg>
+      </div>
+      <p class="maplegend">
+        <span class="key shared"></span> shared path &nbsp;·&nbsp;
+        <span class="key p"></span> P-track (IC / SME) &nbsp;·&nbsp;
+        <span class="key m"></span> M-track (Management) &nbsp;·&nbsp;
+        dashed = optional. Horizontal position reflects the autonomy tier (L1–L5), so P4 and M1 sit on the same band.
+      </p>
+      <p class="maplegend" style="margin-top:4px"><b>Note on reporting:</b> P4 and P5 are individual contributors who report into the management line. The parallel rails show competency parity, not separate reporting structures.</p>
+    </div>
+
+    <h3>At-a-glance matrix</h3>
+    <table>
+      <caption>Concise per-level view. Full detail lives in the P-Track, M-Track, and L&amp;D tabs. Competencies are cumulative — each level assumes everything below it.</caption>
+      <tr>
+        <th class="rowlabel">Dimension</th>
+        <th>P1 · Photo Quality Reviewer</th>
+        <th>P2 · Sr Photo Quality Reviewer</th>
+        <th>P3 · Senior Quality Specialist</th>
+        <th>P4 / M1 · Lead Specialist / Team Lead</th>
+        <th>P5 / M2–M4 · Principal / Mgmt</th>
+      </tr>
+      <tr>
+        <td class="rowlabel">Primary Responsibility<small>The core work the role exists to do.</small></td>
+        <td>Review galleries against the rubric; flag defects; clear feedback inputs.</td>
+        <td>Own full QA scope incl. advanced/virtual-staging edits; validate revisions &amp; disputes.</td>
+        <td>Final authority on complex disputes; runs calibration; mentors reviewers.</td>
+        <td><b>P4:</b> owns the quality system &amp; rubric. <b>M1:</b> leads a shift/pod &amp; its people.</td>
+        <td><b>P5:</b> org-wide quality strategy. <b>M2–M4:</b> multi-team management &amp; ops.</td>
+      </tr>
+      <tr>
+        <td class="rowlabel">Job Complexity<small>How difficult / ambiguous assignments are.</small></td>
+        <td>Semi-routine; recognizes when to deviate.</td>
+        <td>Moderately difficult; judgment on edge cases.</td>
+        <td>Considerable judgment &amp; initiative.</td>
+        <td>Complex; independent action where precedent may not exist.</td>
+        <td>Strategic; shapes how the function operates.</td>
+      </tr>
+      <tr>
+        <td class="rowlabel">Decision Autonomy<small>Rung on the 5-level scale (below).</small></td>
+        <td><span class="lvltag">L1 · Operates</span></td>
+        <td><span class="lvltag">L2 · Discerns</span></td>
+        <td><span class="lvltag">L3 · Independent</span></td>
+        <td><span class="lvltag">L4 · Trusted / Defining</span></td>
+        <td><span class="lvltag">L5 · Strategic</span></td>
+      </tr>
+      <tr>
+        <td class="rowlabel">Discretion / Supervision<small>How much oversight; how independently they act.</small></td>
+        <td>Moderate supervision; instruction on new work.</td>
+        <td>Limited supervision; general instruction.</td>
+        <td>Works autonomously within established practice.</td>
+        <td>Self-directed; sets methods &amp; guides others.</td>
+        <td>Accountable for the system / department.</td>
+      </tr>
+      <tr>
+        <td class="rowlabel">Experience<small>Typical years / background.</small></td>
+        <td>0–1 yr</td><td>1–3 yrs</td><td>3–5 yrs</td><td>P4: 5–7 yrs · M1: 4–6 yrs</td><td>6+ yrs</td>
+      </tr>
+      <tr>
+        <td class="rowlabel">English (CEFR)<small>Minimum target proficiency.</small></td>
+        <td>B1</td><td>B2</td><td>C1</td><td>C1</td><td>C1</td>
+      </tr>
+      <tr>
+        <td class="rowlabel">Key certifications<small>Headline only — full list in L&amp;D tab.</small></td>
+        <td>Claude 101; EF SET; GLSS White Belt; Lightroom (free-cert)</td>
+        <td>+ AI Capabilities &amp; Limitations; Photoshop; basic Sheets</td>
+        <td>+ Six Sigma Green Belt (self-study); advanced Sheets; Critical Thinking</td>
+        <td>+ Feedback; data visualization; (M1) people-leadership cert</td>
+        <td>+ Systems Thinking; Coaching specialization (M-track)</td>
+      </tr>
+    </table>
+
+    <h3>Decision Autonomy scale</h3>
+    <table>
+      <tr><th style="width:120px">Rung</th><th style="width:150px">Name</th><th style="width:120px">Applies to</th><th>What it means</th></tr>
+      <tr><td><b>L1</b></td><td>Operates</td><td>P1</td><td>Handles routine decisions alone; recognizes non-routine cases and escalates them; work is spot-checked after the fact.</td></tr>
+      <tr><td><b>L2</b></td><td>Discerns</td><td>P2</td><td>Resolves edge cases and ambiguity independently; escalates only genuine exceptions; trusted without spot-checks.</td></tr>
+      <tr><td><b>L3</b></td><td>Independent</td><td>P3</td><td>Owns decisions within established standards; sets precedent on familiar problems; accountable for outcomes.</td></tr>
+      <tr><td><b>L4</b></td><td>Trusted / Defining</td><td>P4 ↔ M1</td><td>Decides where no precedent exists; defines the standards others follow.</td></tr>
+      <tr><td><b>L5</b></td><td>Strategic</td><td>M2–M4, P5</td><td>Owns the operating model and policy; decisions shape the whole function.</td></tr>
+    </table>
+    <div class="note"><b>Measuring autonomy.</b> Two groups. <b>Measurable now (qualitative):</b> supervision cadence (reviewed-before → spot-checked → outcomes-only → self-directed) and precedent created (rubric rules / standards / process changes authored). <b>Track going forward (quantitative):</b> escalation rate, decision override/reversal rate, and sign-off threshold — instrument these over 1–2 quarters; not promotion gates yet.</div>
+  </section>
+<!-- SUMMARY-END -->
+
+  <!-- ============ P-TRACK ============ -->
+  <section role="tabpanel" id="t-ptrack" aria-labelledby="tab-ptrack">
+    <h2>P-Track — Individual Contributor / SME</h2>
+    <p class="lede">The craft ladder. Everyone enters here at P1. The path is shared through P3, then at P3 you choose to continue as a P4 SME or move to the M-track. P4 and P5 stay individual contributors — deep craft and quality authority, no people management.</p>
+
+    <h3>Glossary — Reviewer vs. Specialist</h3>
+    <p style="font-size:13px;color:var(--muted);margin:0 0 8px">The ladder changes character at the P2→P3 seam. These two terms are used throughout; hover the dotted terms in the table to see them again.</p>
+    <div class="gloss">
+      <div class="gcard rev">
+        <h4>Reviewer <span style="font-weight:400;color:var(--muted);font-size:12px">(P1–P2)</span></h4>
+        <p><b>Applies</b> the quality standards. Checks work against the rubric, flags what passes or fails, and escalates anything non-routine. Operates the system; does not change it. <span class="add">Placeholder for your formal one-line definition.</span></p>
+      </div>
+      <div class="gcard spec">
+        <h4>Specialist <span style="font-weight:400;color:var(--muted);font-size:12px">(P3+)</span></h4>
+        <p><b>Owns and shapes</b> the quality standards. Resolves disputes where the rubric is silent, sets precedent, and defines what others follow. Improves the system, not just individual outputs. <span class="add">Placeholder for your formal one-line definition.</span></p>
+      </div>
+    </div>
+
+    <div class="stacknote"><b>Competencies are cumulative.</b> Each level includes everything below it, plus what's shown in its column. Cells describe the <i>increment</i> added at that level — a P3 still does everything a P1 and P2 do.</div>
+
+    <table class="p">
+      <tr>
+        <th class="rowlabel">Dimension</th>
+        <th>P1 · Photo Quality Reviewer</th>
+        <th>P2 · Sr Photo Quality Reviewer</th>
+        <th>P3 · Senior Quality Specialist</th>
+        <th>P4 · Lead Quality Specialist (SME)</th>
+        <th>P5 · Principal Quality SME <span style="font-weight:400;font-size:11px">(optional)</span></th>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Role type<small>Where on the Reviewer→Specialist seam.</small></td>
+        <td><span class="term" data-def="Applies standards; flags pass/fail; escalates non-routine.">Reviewer</span></td>
+        <td><span class="term" data-def="Applies standards; flags pass/fail; escalates non-routine.">Reviewer</span></td>
+        <td><span class="term" data-def="Owns and shapes standards; resolves silence in the rubric; sets precedent.">Specialist</span></td>
+        <td><span class="term" data-def="Owns and shapes standards; resolves silence in the rubric; sets precedent.">Specialist</span> (lead)</td>
+        <td><span class="term" data-def="Owns and shapes standards; resolves silence in the rubric; sets precedent.">Specialist</span> (principal)</td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Primary Responsibility<small>Core work the role exists to do.</small></td>
+        <td><ul><li>QA self-service photoshoots &amp; workflows</li><li>QA standard editing jobs against the rubric</li><li>Feedback document inputs</li><li>QA special projects (e.g. Unsplash)</li></ul></td>
+        <td><span class="add">+ adds:</span><ul><li>QA advanced edits incl. virtual staging</li><li>Delivery QA: approve pilot &amp; premium bookings</li><li>Validate revision requests</li><li>Editing disputes validation (in-house &amp; vendors)</li></ul></td>
+        <td><span class="add">+ adds:</span><ul><li>Final authority on complex disputes</li><li>Owns calibration for in-house reviewers</li><li>Sets precedent where the rubric is silent</li><li>Vendor quality feedback &amp; calibration calls</li></ul></td>
+        <td><span class="add">+ adds:</span><ul><li>Owns &amp; versions the QA rubric end-to-end</li><li>Defines vendor quality bar &amp; feedback standards</li><li>Final escalation point for standards</li><li>Trains trainers</li></ul></td>
+        <td><span class="add">+ adds:</span><ul><li>Owns the entire quality system org-wide</li><li>Multi-quarter quality strategy with leadership</li><li>Owns quality KPIs reported to the business</li></ul></td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Feedback &amp; Communication<small>Quality of revision comments — written &amp; verbal.</small></td>
+        <td>Clear &amp; specific: says what is wrong and where, in plain language an editor can act on without follow-up.</td>
+        <td><span class="add">+ adds:</span> diagnostic &amp; actionable — explains <i>why</i> (which standard) and <i>what</i> the fix is; same clarity verbally.</td>
+        <td><span class="add">+ adds:</span> calibrated &amp; teachable — consistent across editors, prioritizes critical vs. nitpick, coaches, handles pushback.</td>
+        <td><span class="add">+ adds:</span> sets how the team words feedback — templates, tone, rubric language; calibrates vendor-facing feedback.</td>
+        <td><span class="add">+ adds:</span> owns feedback quality as a measurable function output.</td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Critical Thinking<small>Diagnose root cause before commenting.</small></td>
+        <td>Identifies the defect and the obvious cause.</td>
+        <td><span class="add">+ adds:</span> distinguishes symptom from root cause; weighs the likely source before flagging.</td>
+        <td><span class="add">+ adds:</span> structured problem-solving; weighs alternatives; evidence-based calls on ambiguous cases.</td>
+        <td><span class="add">+ adds:</span> builds root-cause patterns into the rubric &amp; checks.</td>
+        <td><span class="add">+ adds:</span> frames the analytical approach the function uses.</td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">AI Fluency<small>Prompting &amp; navigating Claude; knowing its limits.</small></td>
+        <td>Navigates Claude; basic prompting; understands strengths &amp; limits.</td>
+        <td><span class="add">+ adds:</span> effective prompting for QA tasks; uses AI to speed checks without over-trusting it.</td>
+        <td><span class="add">+ adds:</span> designs prompt approaches for common QA scenarios; judges when AI output is reliable.</td>
+        <td><span class="add">+ adds:</span> sets AI-tooling standards &amp; prompt templates for the function.</td>
+        <td><span class="add">+ adds:</span> AI strategy for the QA function.</td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">AI Quality-Checking<small>Spotting hallucinations &amp; AI artifacts.</small></td>
+        <td><b>Baseline:</b> spots AI hallucinations &amp; artifacts in edited output (fabricated background texture, invented hair, warped/duplicated detail after object removal).</td>
+        <td><span class="add">+ adds:</span> recognizes recurring AI failure types; flags patterns, not just instances.</td>
+        <td><span class="add">+ adds:</span> defines which AI errors the team checks for; builds it into the rubric.</td>
+        <td><span class="add">+ adds:</span> owns the AI-QC methodology; calibrates in-house &amp; vendors on failure modes.</td>
+        <td><span class="add">+ adds:</span> owns AI-QC as a measurable quality system.</td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Data Literacy<small>Read → analyze → visualize.</small></td>
+        <td>Reads a sheet; sorts/filters; follows a tracker.</td>
+        <td><span class="add">+ adds:</span> basic formulas (SUM/IF/COUNTIF); reads a chart correctly.</td>
+        <td><span class="add">+ adds:</span> pivot tables, VLOOKUP/QUERY; builds own tracker; interprets trends.</td>
+        <td><span class="add">+ adds:</span> builds dashboards; turns data into a recommendation (data storytelling).</td>
+        <td><span class="add">+ adds:</span> defines which quality metrics the function tracks &amp; how they're visualized.</td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Editing craft<small>Lightroom Classic + Photoshop.</small></td>
+        <td>Lightroom Classic fundamentals; recognizes good vs. bad edits against reference.</td>
+        <td><span class="add">+ adds:</span> advanced retouch judgment — background removal, hair strays, object removal in Photoshop.</td>
+        <td><span class="add">+ adds:</span> assessed internally against the rubric; judges edge-case edits.</td>
+        <td><span class="add">+ adds:</span> defines the editing-quality bar others are measured against.</td>
+        <td><span class="add">+ adds:</span> owns craft standards across the function.</td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Decision Autonomy<small>Rung + how it shows here.</small></td>
+        <td><span class="lvltag">L1 · Operates</span><span class="add">routine solo; escalates non-routine; spot-checked.</span></td>
+        <td><span class="lvltag">L2 · Discerns</span><span class="add">edge cases solo; escalates true exceptions only.</span></td>
+        <td><span class="lvltag">L3 · Independent</span><span class="add">owns decisions within standards; sets precedent on familiar problems.</span></td>
+        <td><span class="lvltag">L4 · Trusted / Defining</span><span class="add">decides where no precedent exists; defines standards.</span></td>
+        <td><span class="lvltag">L5 · Strategic</span><span class="add">owns policy &amp; the operating model for quality.</span></td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Promotion signals<small>Master / Perform / Stretch (the company rule).</small></td>
+        <td><b>Master</b> P1 · <b>Perform</b> P2 scope · <b>Stretch</b> shadow disputes</td>
+        <td><b>Master</b> P2 · <b>Perform</b> P3 scope · <b>Stretch</b> draft rubric section / run a calibration</td>
+        <td><b>Master</b> P3 · <b>Perform</b> P4 scope · <b>Stretch</b> represent QA cross-functionally <i>(or move to M1)</i></td>
+        <td><b>Master</b> P4 · <b>Perform</b> strategy scope · <b>Stretch</b> influence function hiring bar</td>
+        <td><b>Master</b> P5 · ceiling of the IC track</td>
+      </tr>
+    </table>
+    <div class="openitem"><h4>Open item</h4>Finalize the formal one-line definitions of <b>Reviewer</b> and <b>Specialist</b> (placeholders above), and confirm the editing-craft assessment owner at P3+.</div>
+  </section>
+<!-- PTRACK-END -->
+
+  <!-- ============ M-TRACK ============ -->
+  <section role="tabpanel" id="t-mtrack" aria-labelledby="tab-mtrack">
+    <h2>M-Track — Management</h2>
+    <p class="lede">The people-and-delivery ladder. Entered from P3 at the fork; M1 (Team Lead) is the same competency level as P4. Managers keep the QA craft baseline — including AI quality-checking — and add people leadership, delivery ownership, and systems thinking on top.</p>
+
+    <div class="stacknote"><b>Competencies are cumulative.</b> Each level includes everything below it (and the shared P1–P3 craft foundation), plus what's shown in its column. Cells describe the <i>increment</i> added at that level.</div>
+
+    <table class="m">
+      <tr>
+        <th class="rowlabel">Dimension</th>
+        <th>M1 · Team Lead</th>
+        <th>M2 · Senior Team Lead</th>
+        <th>M3 · Operations Manager</th>
+        <th>M4 · Senior Operations Manager</th>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Primary Responsibility<small>Core work the role exists to do.</small></td>
+        <td><ul><li>Manages a shift/pod &amp; all direct reports</li><li>Weekly 1:1s (performance + personal check-in)</li><li>Delivery QA approval (pilot &amp; premium)</li><li>QA training &amp; shift-level staffing</li><li>Shift-level data analysis</li></ul></td>
+        <td><span class="add">+ adds:</span><ul><li>Manages multiple leads / shifts</li><li>Owns staffing forecast across the function</li><li>Handles escalated performance &amp; conflict</li></ul></td>
+        <td><span class="add">+ adds:</span><ul><li>Owns QA outcomes for the department</li><li>Cross-functional initiatives with Creative Ops</li><li>Builds the hiring &amp; onboarding engine</li></ul></td>
+        <td><span class="add">+ adds:</span><ul><li>Multi-team org design, budget &amp; strategy</li><li>Vendor relationship escalations</li><li>Represents QA at leadership forums</li></ul></td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">People &amp; Delivery<small>Span of management.</small></td>
+        <td>One shift/pod; direct reports.</td>
+        <td><span class="add">+ adds:</span> multiple leads/shifts.</td>
+        <td><span class="add">+ adds:</span> a department; outcomes &amp; cross-team delivery.</td>
+        <td><span class="add">+ adds:</span> multi-team / function; headcount &amp; budget.</td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Feedback &amp; Communication<small>Now includes people management.</small></td>
+        <td>Carries the P3 feedback bar, plus delivers performance feedback in 1:1s constructively.</td>
+        <td><span class="add">+ adds:</span> handles difficult conversations &amp; conflict across a team.</td>
+        <td><span class="add">+ adds:</span> communicates department direction; aligns cross-functional partners.</td>
+        <td><span class="add">+ adds:</span> represents the function; leadership-level communication.</td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">AI Fluency<small>Prompting &amp; navigating Claude; knowing its limits.</small></td>
+        <td>Same baseline as the ICs they oversee — navigates Claude, prompts effectively, knows the limits (can't lead QA on AI work without it).</td>
+        <td><span class="add">+ adds:</span> sets team norms for responsible AI use in the QA workflow.</td>
+        <td><span class="add">+ adds:</span> drives AI-assisted QA tooling adoption across teams.</td>
+        <td><span class="add">+ adds:</span> AI strategy &amp; investment decisions for the function.</td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">AI Quality-Checking<small>Hallucination spotting, now as a team standard.</small></td>
+        <td><b>Baseline:</b> spots hallucinations &amp; AI artifacts personally (same as P1), <i>and</i> ensures their team catches them.</td>
+        <td><span class="add">+ adds:</span> builds AI-error checks into shift QC; tracks AI-failure trends.</td>
+        <td><span class="add">+ adds:</span> owns AI-QC performance across the department; reports trends to the business.</td>
+        <td><span class="add">+ adds:</span> accountable for AI-QC as a function-wide quality &amp; client-risk control.</td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Systems Thinking<small>Seeing shifts, staffing, vendors &amp; quality as one system.</small></td>
+        <td>Traces a quality dip to its real cause (staffing, upstream process) rather than blaming the individual.</td>
+        <td><span class="add">+ adds:</span> designs changes that account for downstream effects across shifts.</td>
+        <td><span class="add">+ adds:</span> optimizes the department as a system — balances throughput, quality &amp; cost.</td>
+        <td><span class="add">+ adds:</span> shapes the operating model so the whole function self-corrects.</td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Data Literacy<small>Shift / department reporting.</small></td>
+        <td>Carries P3 data skills; runs shift-level analysis.</td>
+        <td><span class="add">+ adds:</span> staffing &amp; performance dashboards across shifts.</td>
+        <td><span class="add">+ adds:</span> department-level reporting &amp; forecasting.</td>
+        <td><span class="add">+ adds:</span> function metrics for leadership &amp; budget.</td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Decision Autonomy<small>Rung + how it shows here.</small></td>
+        <td><span class="lvltag">L4 · Trusted / Defining</span><span class="add">decides where no precedent exists; owns shift outcomes.</span></td>
+        <td><span class="lvltag">L5 · Strategic</span><span class="add">policy across multiple shifts.</span></td>
+        <td><span class="lvltag">L5 · Strategic</span><span class="add">department operating model.</span></td>
+        <td><span class="lvltag">L5 · Strategic</span><span class="add">function-level &amp; budget authority.</span></td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Systems Thinking — measures<small>How the new skill is evidenced.</small></td>
+        <td colspan="4">
+          <b>Qualitative (now):</b> quality of cross-functional decisions — can they trace a defect to a staffing or upstream cause, and do their process changes account for downstream effects.&nbsp;
+          <b>Quantitative (track forward):</b> second-order outcomes — does an intervention reduce <i>recurrence</i> (repeat-defect rate) and improve cross-shift consistency after a change they own, not just fix the instance.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="rowlabel">Promotion signals<small>Master / Perform / Stretch.</small></td>
+        <td><b>Master</b> M1 · <b>Perform</b> M2 scope · <b>Stretch</b> contribute to function strategy</td>
+        <td><b>Master</b> M2 · <b>Perform</b> M3 scope · <b>Stretch</b> own a cross-functional initiative</td>
+        <td><b>Master</b> M3 · <b>Perform</b> M4 scope · <b>Stretch</b> multi-team org design input</td>
+        <td><b>Master</b> M4 · senior leadership track</td>
+      </tr>
+    </table>
+  </section>
+<!-- MTRACK-END -->
+
+  <!-- ============ L&D ============ -->
+  <section role="tabpanel" id="t-ld" aria-labelledby="tab-ld">
+    <h2>L&amp;D / Training Detail</h2>
+    <p class="lede">Every skill shown three ways so L&amp;D can choose the funding posture per skill. Free options listed first; all free options below issue a genuinely free certificate (or, where noted, a free completion record). Paid options are recognized credentials with payment frequency stated.</p>
+
+    <div class="note" style="background:var(--accent-soft);border-left-color:var(--accent);color:#26415c">
+      <b>How to read this table:</b> tap or hover the <span style="border:1px solid #cdd8e4;background:#eef3f8;border-radius:20px;padding:1px 8px;font-size:11px;font-weight:700;color:var(--accent)">ⓘ who &amp; why</span> button on any row to see which levels must complete/be certified and why the skill is needed. Certifications are cumulative — "P1+" means that level and everyone above it.
+    </div>
+
+    <div class="legendbar">
+      <span><span class="pill free">Internal (Free)</span> built &amp; owned in-house</span>
+      <span><span class="pill freecert">External Free (cert incl.)</span> outside course, certificate at no cost</span>
+      <span><span class="pill paid">External Paid</span> recognized paid credential</span>
+    </div>
+
+    <h4 style="margin:22px 0 2px;color:var(--accent);font-size:14px">Technical</h4>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 6px">Craft, tools, and the mechanics of working with AI — the hands-on skills of reviewing and editing.</p>
+    <table>
+      <tr>
+        <th style="width:200px">Skill</th>
+        <th>Internal (Free)</th>
+        <th>External Free (Free, with Cert)</th>
+        <th>External Paid</th>
+      </tr>
+      <tr>
+        <td><b>Lightroom Classic</b><br><span class="add">primary editing tool</span>
+          <div class="info"><span class="trigger" tabindex="0" role="button" aria-expanded="false">ⓘ who &amp; why</span>
+            <div class="pop"><span class="who">Who: P1+ (all)</span><span class="why"><b>Why:</b> Lightroom is where the bulk of editing happens. Reviewers can't judge an edit they don't understand; the tool literacy is the floor for all QA work.</span></div></div>
+        </td>
+        <td>Internal rubric assessment (P3+ SMEs judge against the standard)</td>
+        <td><span class="pill freecert">free cert</span><br><a class="course" href="https://cursa.app/free-courses-image-editing-en-online" target="_blank" rel="noopener">Cursa — Lightroom / photo editing</a></td>
+        <td><span class="pill paid">paid</span><br><a class="course" href="https://certifiedprofessional.adobe.com/" target="_blank" rel="noopener">Adobe Certified Professional — Lightroom</a><span class="freq">~$95–150 · one-time, 3-yr validity</span></td>
+      </tr>
+      <tr>
+        <td><b>Photoshop (advanced retouch)</b><br><span class="add">bg / hair / object removal</span>
+          <div class="info"><span class="trigger" tabindex="0" role="button" aria-expanded="false">ⓘ who &amp; why</span>
+            <div class="pop"><span class="who">Who: P2+</span><span class="why"><b>Why:</b> advanced retouching is exactly where generative AI fabricates detail. QAs must understand these edits to catch the errors clients have escalated.</span></div></div>
+        </td>
+        <td>Internal assessment of retouching quality</td>
+        <td><span class="pill freecert">free cert</span><br><a class="course" href="https://cursa.app/free-courses-image-editing-en-online" target="_blank" rel="noopener">Cursa — Photoshop basics</a></td>
+        <td><span class="pill paid">paid</span><br><a class="course" href="https://certifiedprofessional.adobe.com/photoshop" target="_blank" rel="noopener">Adobe Certified Professional — Photoshop</a><span class="freq">~$95–150 · one-time</span></td>
+      </tr>
+      <tr>
+        <td><b>AI fluency</b><br><span class="add">prompting, navigating Claude</span>
+          <div class="info"><span class="trigger" tabindex="0" role="button" aria-expanded="false">ⓘ who &amp; why</span>
+            <div class="pop"><span class="who">Who: P1+ and M1+</span><span class="why"><b>Why:</b> AI is in the editing pipeline. Everyone — ICs and the managers who oversee them — needs baseline fluency to use it well and judge its output.</span></div></div>
+        </td>
+        <td>Internal AI-use playbook for QA tasks</td>
+        <td><span class="pill freecert">free cert</span><br><a class="course" href="https://anthropic.skilljar.com/" target="_blank" rel="noopener">Anthropic Academy — Claude 101 + AI Fluency: Framework &amp; Foundations</a></td>
+        <td><span class="none">—</span></td>
+      </tr>
+      <tr>
+        <td><b>AI quality-checking</b><br><span class="add">hallucination spotting</span>
+          <div class="info"><span class="trigger" tabindex="0" role="button" aria-expanded="false">ⓘ who &amp; why</span>
+            <div class="pop"><span class="who">Who: P1+ (baseline) and M1+</span><span class="why"><b>Why — client-driven:</b> clients have escalated AI hallucinations in delivered advanced edits. Spotting them is now baseline reviewing, not a specialist skill.</span></div></div>
+        </td>
+        <td><span class="pill free">internal</span><br><b>“AI Frameworks for Creative Quality-Checking”</b> — internal course on photo-specific AI failure modes, built on real client-escalation examples <span class="add">(see course spec below)</span></td>
+        <td><span class="pill freecert">free cert</span><br><a class="course" href="https://anthropic.skilljar.com/" target="_blank" rel="noopener">Anthropic Academy — AI Capabilities &amp; Limitations</a></td>
+        <td><span class="none">—</span></td>
+      </tr>
+      <tr>
+        <td><b>Data literacy</b><br><span class="add">read → analyze → visualize</span>
+          <div class="info"><span class="trigger" tabindex="0" role="button" aria-expanded="false">ⓘ who &amp; why</span>
+            <div class="pop"><span class="who">Who: P1+ (read); P3+ (analyze); P4 / M2+ (visualize)</span><span class="why"><b>Why:</b> the "Analytical Creatives" value — QAs bring data to quality decisions instead of intuition, and seniors build the trackers others rely on.</span></div></div>
+        </td>
+        <td>Internal trackers &amp; templates</td>
+        <td><span class="pill freecert">free cert</span><br><a class="course" href="https://www.life-global.org/" target="_blank" rel="noopener">HP LIFE — Data &amp; Analytics</a>; <a class="course" href="https://cursa.app/free-online-courses/google-sheets" target="_blank" rel="noopener">Cursa — Google Sheets</a></td>
+        <td><span class="pill paid">paid</span><br><a class="course" href="https://www.coursera.org/professional-certificates/google-data-analytics" target="_blank" rel="noopener">Google Data Analytics Certificate</a> (optional, stretch)<span class="freq">~$49 · monthly until complete</span></td>
+      </tr>
+    </table>
+
+    <h4 style="margin:22px 0 2px;color:var(--accent);font-size:14px">Operational / Strategic</h4>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 6px">Process, systems, and structured reasoning — how QAs diagnose causes and improve the system, not just outputs.</p>
+    <table>
+      <tr>
+        <th style="width:200px">Skill</th>
+        <th>Internal (Free)</th>
+        <th>External Free (Free, with Cert)</th>
+        <th>External Paid</th>
+      </tr>
+      <tr>
+        <td><b>Process improvement</b><br><span class="add">root-cause / DMAIC</span>
+          <div class="info"><span class="trigger" tabindex="0" role="button" aria-expanded="false">ⓘ who &amp; why</span>
+            <div class="pop"><span class="who">Who: P1+ (White Belt); P2+ (Yellow Belt)</span><span class="why"><b>Why:</b> moves QAs from fixing one-off errors to spotting and resolving systemic defects — the basis of dispute validation and quality trends.</span></div></div>
+        </td>
+        <td><span class="none">—</span></td>
+        <td><span class="pill freecert">free cert</span><br><a class="course" href="https://goleansixsigma.com/product/online-lean-six-sigma-white-belt-training/" target="_blank" rel="noopener">GLSS — Lean Six Sigma White Belt</a></td>
+        <td><span class="pill paid">paid</span><br><a class="course" href="https://goleansixsigma.com/product/free-lean-six-sigma-training/" target="_blank" rel="noopener">GLSS — Lean Six Sigma Yellow Belt</a><span class="freq">~$120–150 · per seat / team subscription</span></td>
+      </tr>
+      <tr>
+        <td><b>Systems thinking</b><br><span class="add">M-track</span>
+          <div class="info"><span class="trigger" tabindex="0" role="button" aria-expanded="false">ⓘ who &amp; why</span>
+            <div class="pop"><span class="who">Who: M1+ (management only)</span><span class="why"><b>Why:</b> managers must see shifts, staffing, vendors and quality as one system — tracing defects to real causes and designing changes that hold across the operation.</span></div></div>
+        </td>
+        <td><span class="pill free">internal</span><br>Assessed via second-order outcomes (recurrence, cross-shift consistency)</td>
+        <td><span class="pill freecert">free cert</span><br><a class="course" href="https://goleansixsigma.com/product/online-lean-six-sigma-white-belt-training/" target="_blank" rel="noopener">GLSS White/Yellow Belt</a> (DMAIC = systems thinking applied)</td>
+        <td><span class="pill paid">paid</span><br><a class="course" href="https://goleansixsigma.com/product/free-lean-six-sigma-training/" target="_blank" rel="noopener">GLSS Yellow Belt</a> (as above)<span class="freq">~$120–150 · per seat</span></td>
+      </tr>
+      <tr>
+        <td><b>Critical thinking</b><br><span class="add">diagnose before commenting</span>
+          <div class="info"><span class="trigger" tabindex="0" role="button" aria-expanded="false">ⓘ who &amp; why</span>
+            <div class="pop"><span class="who">Who: P2+</span><span class="why"><b>Why:</b> the analytical rigor behind good feedback — diagnosing the <i>cause</i> of a defect, not just naming the symptom. Also reinforces the "AI-driven" value.</span></div></div>
+        </td>
+        <td><span class="none">—</span></td>
+        <td><span class="pill freecert">free cert</span><br><a class="course" href="https://www.life-global.org/" target="_blank" rel="noopener">HP LIFE — Critical Thinking in the AI Era</a></td>
+        <td><span class="none">—</span></td>
+      </tr>
+    </table>
+
+    <h4 style="margin:22px 0 2px;color:var(--accent);font-size:14px">Communication</h4>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 6px">Language and interpersonal skills — giving feedback, English proficiency, and (for managers) coaching people.</p>
+    <table>
+      <tr>
+        <th style="width:200px">Skill</th>
+        <th>Internal (Free)</th>
+        <th>External Free (Free, with Cert)</th>
+        <th>External Paid</th>
+      </tr>
+      <tr>
+        <td><b>Feedback &amp; communication</b><br><span class="add">revision comments, written + verbal</span>
+          <div class="info"><span class="trigger" tabindex="0" role="button" aria-expanded="false">ⓘ who &amp; why</span>
+            <div class="pop"><span class="who">Who: P1+ (clarity); P3+, M1+ (giving feedback)</span><span class="why"><b>Why:</b> feedback <i>is</i> a QA's output. Vague comments cause revision cycles; precise ones resolve first time. Directly serves "Radical Candor."</span></div></div>
+        </td>
+        <td>Internal feedback templates &amp; tone guide</td>
+        <td><span class="pill freecert">free cert</span><br><a class="course" href="https://www.life-global.org/" target="_blank" rel="noopener">HP LIFE — Effective Communication / Business Writing</a></td>
+        <td><span class="pill paid">paid</span><br><a class="course" href="https://www.coursera.org/learn/feedback" target="_blank" rel="noopener">Coursera — Giving Helpful Feedback (CU Boulder)</a><span class="freq">via Coursera Plus · annual</span></td>
+      </tr>
+      <tr>
+        <td><b>English (CEFR)</b><br><span class="add">assessment + uplift</span>
+          <div class="info"><span class="trigger" tabindex="0" role="button" aria-expanded="false">ⓘ who &amp; why</span>
+            <div class="pop"><span class="who">Who: all — targets B1 (P1) → C1 (P3+, M-track)</span><span class="why"><b>Why:</b> you can't write concise feedback or run vendor calls below the target level. The bar is a development target, not a hiring gate.</span></div></div>
+        </td>
+        <td><span class="none">—</span></td>
+        <td><span class="pill freecert">free cert</span><br><a class="course" href="https://www.efset.org/" target="_blank" rel="noopener">EF SET</a> (assessment, CEFR-aligned); <a class="course" href="https://www.life-global.org/" target="_blank" rel="noopener">HP LIFE writing/comms</a> (uplift)</td>
+        <td>EF SET proctored — only if defensible scores ever needed<span class="freq">likely $0 in year one</span></td>
+      </tr>
+      <tr>
+        <td><b>Coaching / people leadership</b><br><span class="add">M-track</span>
+          <div class="info"><span class="trigger" tabindex="0" role="button" aria-expanded="false">ⓘ who &amp; why</span>
+            <div class="pop"><span class="who">Who: M1+ (management only)</span><span class="why"><b>Why:</b> managers run 1:1s, develop people and manage conflict. The free course is a floor; the paid specialization covers coaching psychology and accountability.</span></div></div>
+        </td>
+        <td><span class="none">—</span></td>
+        <td><span class="pill freecert">free cert</span><br><a class="course" href="https://www.life-global.org/" target="_blank" rel="noopener">HP LIFE — professional-development courses</a> (floor)</td>
+        <td><span class="pill paid">paid</span><br><a class="course" href="https://www.coursera.org/specializations/feedback-and-coaching" target="_blank" rel="noopener">Coursera — Feedback &amp; Coaching for Everyone (ASU)</a><span class="freq">via Coursera Plus · annual</span></td>
+      </tr>
+    </table>
+
+    <h3>Budget justifications</h3>
+    <div class="twocol">
+      <div>
+        <h4>GLSS Lean Six Sigma Yellow Belt — P2+ &amp; M-track</h4>
+        <p style="font-size:13px;color:var(--muted);margin:0 0 12px">~US$120–150/seat or a team subscription (often 40% off). The free White Belt only teaches vocabulary; Yellow Belt teaches DMAIC, process mapping and root-cause analysis through project work — exactly what a P2 uses to validate disputes and what managers use for systems thinking. A team subscription lowers per-head cost.</p>
+        <h4>Coursera — Feedback &amp; Coaching for Everyone (ASU) — M-track</h4>
+        <p style="font-size:13px;color:var(--muted);margin:0">~US$59/mo or ~US$399/yr per learner (Coursera Plus covers this plus the feedback course). The free course covers basics; managers need the full specialization — coaching psychology, managing up/down, accountability. Cost control: apply for Coursera financial aid (free) first; budget only for denials.</p>
+      </div>
+      <div>
+        <div class="note" style="margin-top:0"><b>AI quality-checking is a client-driven priority, not a nice-to-have.</b> Clients have escalated AI hallucinations they detected in delivered work — specifically in the Photoshop-heavy advanced edits (background removal, hair strays, object removal) where generative AI fabricates detail. This makes the P1 hallucination-spotting baseline non-negotiable and justifies the internal AI-QC training. The Anthropic Academy "AI Capabilities &amp; Limitations" certificate (free) sits underneath it; the photo-specific failure modes are taught internally from real escalation examples.</div>
+        <h4>Optional / deferred</h4>
+        <p style="font-size:13px;color:var(--muted);margin:0">Adobe Certified Professional (Lightroom/Photoshop) and the Google Data Analytics Certificate are optional recognized upgrades — fund per-person only where a portable credential is wanted. EF SET proctoring is likely $0 in year one.</p>
+        <p style="font-size:13px;color:var(--ink);margin:12px 0 0"><b>Bottom line:</b> the framework is deliverable at near-zero cost. Realistic paid ask = one GLSS team subscription + a pool of Coursera Plus seats for confirmed M-track candidates.</p>
+      </div>
+    </div>
+
+    <h3>Proposed internal course</h3>
+    <div class="coursespec">
+      <h4>AI Frameworks for Creative Quality-Checking</h4>
+      <p class="tagline">No credible external course teaches this — the failure modes are specific to our pipeline. Built and owned in-house, it is the direct answer to the client escalations. Authoring it is P4/P5 SME work.</p>
+      <dl class="spec-grid">
+        <dt>Why internal</dt>
+        <dd>The AI errors clients flagged are specific to our editing pipeline (Lightroom + Photoshop retouch). A generic AI course can't teach what <i>our</i> clients caught; our SMEs can.</dd>
+        <dt>Foundation</dt>
+        <dd><b>External, free-cert:</b> <a class="course" href="https://anthropic.skilljar.com/" target="_blank" rel="noopener">Anthropic Academy — AI Capabilities &amp; Limitations</a> — teaches <i>why</i> generative AI fabricates detail.</dd>
+        <dt>Application</dt>
+        <dd><b>Internal module</b> on our specific failure modes: a labeled gallery of real (anonymized) escalation examples — good vs. hallucinated — with a checklist per edit type (background removal · hair strays · object removal) and a calibration quiz.</dd>
+        <dt>Owner</dt>
+        <dd>P4 / P5 SMEs author and maintain it; it becomes the team's AI-QC standard and doubles as calibration material. Authoring counts toward their own progression.</dd>
+        <dt>Certification</dt>
+        <dd>Internal completion record (proof of completion), refreshed as new failure modes appear.</dd>
+        <dt>Who completes it</dt>
+        <dd>P1+ (the hallucination-spotting baseline) and M1+ (so managers can hold their teams to it).</dd>
+        <dt>Cost to fund</dt>
+        <dd>SME time to build and maintain — no licensing fee. The only "spend" is the hours, which sit inside existing P4/P5 responsibilities.</dd>
+      </dl>
+    </div>
+  </section>
+<!-- LD-END -->
+
+  <!-- ============ VALUES & ROLLOUT ============ -->
+  <section role="tabpanel" id="t-values" aria-labelledby="tab-values">
+    <h2>Values &amp; Rollout</h2>
+    <p class="lede">How the framework reinforces company values rather than sitting beside them, plus a step-by-step rollout.</p>
+
+    <h3>Values alignment</h3>
+    <table>
+      <tr><th style="width:230px">Value</th><th>Where it shows up in the framework</th></tr>
+      <tr><td class="rowlabel">Extreme Ownership / Customer Obsessed</td><td>Delivery QA approval and dispute ownership move earlier in the ladder; QAs own customer-facing quality, not just throughput. AI-QC exists because clients felt the gap.</td></tr>
+      <tr><td class="rowlabel">One team, one goal</td><td>Cross-functional Creative Ops × Photographer calibration is a named competency from P2 up; the SME track lets craft experts collaborate without moving into management.</td></tr>
+      <tr><td class="rowlabel">Radical Candor</td><td>Feedback &amp; Communication is its own competency with a rising bar, plus CEFR targets — "deadly precision" becomes trainable and measured, not a vibe.</td></tr>
+      <tr><td class="rowlabel">Get sh*t done</td><td>Promotion requires already performing the next role — output, not tenure, drives advancement.</td></tr>
+      <tr><td class="rowlabel">AI-driven <span class="add">(confirm exact wording)</span></td><td>AI Fluency and AI Quality-Checking are staggered competencies from P1 (and M1) up; the SME/lead levels own AI-assisted QA tooling. Driven by a real client-escalation problem.</td></tr>
+      <tr><td class="rowlabel">Intolerance to mediocrity</td><td>Objective competency matrices + CEFR bars + the autonomy scale raise the floor each cycle; the Master/Perform/Stretch gate prevents soft promotions.</td></tr>
+      <tr><td class="rowlabel">Analytical Creatives — Data-informed problem solvers</td><td>Data Literacy and Critical Thinking are staggered competencies; Six Sigma + data-analysis duties make data a requirement, not an option.</td></tr>
+      <tr><td class="rowlabel">Analytical Creatives — Discerning eye</td><td>The editing-craft path (Lightroom, Photoshop retouch) and internal rubric assessment are literally about spotting good from bad.</td></tr>
+      <tr><td class="rowlabel">Inject humor and fun</td><td>Best expressed in how 1:1s and calibration sessions run; consider adding it as a culture-fit signal in M-track 1:1 expectations.</td></tr>
+    </table>
+
+    <h3>Rollout</h3>
+    <ol class="tight">
+      <li><b>Baseline.</b> Run EF SET on all current QAs and map each person against the matrices. (Free, ~1 week.)</li>
+      <li><b>Slot.</b> Place each QA at P1–P3 by demonstrated scope; P3s declare a track preference (SME vs management) at the fork.</li>
+      <li><b>Gap plan.</b> For each person, assign the free-cert courses for their target level plus any English gap from step 1.</li>
+      <li><b>Budget ask.</b> Take the L&amp;D tab to leadership for the GLSS team subscription + Coursera Plus pool.</li>
+      <li><b>Cadence.</b> Reassess against the matrices and autonomy signals each cycle; promote only when Master + Perform + Stretch and the right autonomy rung are consistently met. Instrument the quantitative autonomy &amp; systems-thinking signals over the next 1–2 quarters.</li>
+    </ol>
+
+    <div class="openitem">
+      <h4>Open items for you</h4>
+      <ul class="tight" style="margin-top:4px">
+        <li>Confirm the exact wording of the <b>"AI-driven"</b> value so it can be tightened in the SME/M-track rows.</li>
+        <li>Write the formal one-line definitions of <b>Reviewer</b> and <b>Specialist</b> (placeholders in the P-Track tab).</li>
+        <li>Decide which autonomy &amp; systems-thinking signals you can measure <b>now</b> vs. instrument going forward.</li>
+        <li>Confirm the editing-craft assessment owner at P3+.</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer><div class="wrap">Prepared by Ana Cuaresma on June 2026 via Claude.</div></footer>
+
+<script>
+  // tabs
+  const tabs = Array.from(document.querySelectorAll('[role=tab]'));
+  const panels = Array.from(document.querySelectorAll('[role=tabpanel]'));
+  function select(tab){
+    tabs.forEach(t=>t.setAttribute('aria-selected', String(t===tab)));
+    panels.forEach(p=>p.classList.toggle('active', p.id==='t-'+tab.id.replace('tab-','')));
+  }
+  tabs.forEach(t=>t.addEventListener('click',()=>select(t)));
+  document.querySelector('nav.tabs').addEventListener('keydown',e=>{
+    const i=tabs.indexOf(document.activeElement); if(i<0)return;
+    if(e.key==='ArrowRight'){tabs[(i+1)%tabs.length].focus();}
+    if(e.key==='ArrowLeft'){tabs[(i-1+tabs.length)%tabs.length].focus();}
+    if(e.key==='Enter'||e.key===' '){select(document.activeElement);e.preventDefault();}
+  });
+
+  // L&D info popovers — tap/click to toggle (works on touch), hover handled by CSS
+  const infos = Array.from(document.querySelectorAll('.info'));
+  function closeAll(except){ infos.forEach(i=>{ if(i!==except){i.classList.remove('open');
+    const t=i.querySelector('.trigger'); if(t)t.setAttribute('aria-expanded','false'); } }); }
+  infos.forEach(info=>{
+    const trig=info.querySelector('.trigger');
+    trig.addEventListener('click',e=>{ e.stopPropagation();
+      const open=info.classList.toggle('open'); closeAll(open?info:null);
+      trig.setAttribute('aria-expanded',String(open)); });
+    trig.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();trig.click();} });
+  });
+  document.addEventListener('click',()=>closeAll(null));
+
+  // glossary term tooltips (tap-to-toggle simple title-style popover)
+  document.querySelectorAll('.term').forEach(term=>{
+    term.setAttribute('title', term.getAttribute('data-def')||'');
+  });
+</script>
+</body>
+</html>
